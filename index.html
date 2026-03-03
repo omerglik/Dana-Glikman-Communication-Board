@@ -26,6 +26,7 @@
             display: flex; flex-direction: column; align-items: center;
             padding: 20px 16px 0;
             overflow-y: auto; -webkit-overflow-scrolling: touch;
+            padding-bottom: 70px;
             opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
         }
         .slide.active { opacity: 1; pointer-events: all; }
@@ -77,10 +78,11 @@
         /* Navigation */
         .navigation {
             display: flex; align-items: center; justify-content: center; gap: 16px;
-            padding: 10px 0; width: 100%;
-            position: sticky; bottom: 0; z-index: 10;
-            background: inherit; 
-            margin-top: auto;
+            padding: 10px 16px; width: 100%;
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
         }
 
         .nav-btn {
@@ -305,11 +307,6 @@
         <div class="title-author-new">דנה גליקמן</div>
         <div class="title-role-new">קלינאית תקשורת</div>
         <a href="https://www.dana-glikman.co.il/" class="title-website-link" target="_blank">&#x1F310; www.dana-glikman.co.il</a>
-        <div class="navigation">
-            <button class="nav-btn prev" onclick="prevSlide()">הקודם</button>
-            <div class="dots"></div>
-            <button class="nav-btn next" onclick="nextSlide()">הבא</button>
-        </div>
     </div>
 
     <!-- Slide 1: Feelings -->
@@ -365,11 +362,6 @@
                 <span class="option-label">לחוץ</span>
             </div>
         </div>
-        <div class="navigation">
-            <button class="nav-btn prev" onclick="prevSlide()">הקודם</button>
-            <div class="dots"></div>
-            <button class="nav-btn next" onclick="nextSlide()">הבא</button>
-        </div>
     </div>
 
     <!-- Slide 2: Activities at Home -->
@@ -416,11 +408,6 @@
                 <span class="option-label">לדבר בטלפון</span>
             </div>
         </div>
-        <div class="navigation">
-            <button class="nav-btn prev" onclick="prevSlide()">הקודם</button>
-            <div class="dots"></div>
-            <button class="nav-btn next" onclick="nextSlide()">הבא</button>
-        </div>
     </div>
 
     <!-- Slide 3: Who Am I With at Home -->
@@ -462,11 +449,6 @@
                 <span class="option-emoji">&#x1F415;</span>
                 <span class="option-label">חיית מחמד</span>
             </div>
-        </div>
-        <div class="navigation">
-            <button class="nav-btn prev" onclick="prevSlide()">הקודם</button>
-            <div class="dots"></div>
-            <button class="nav-btn next" onclick="nextSlide()">הבא</button>
         </div>
     </div>
 
@@ -526,11 +508,6 @@
                 <span class="option-label">לשחק משחק קופסא</span>
             </div>
         </div>
-        <div class="navigation">
-            <button class="nav-btn prev" onclick="prevSlide()">הקודם</button>
-            <div class="dots"></div>
-            <button class="nav-btn next" onclick="nextSlide()">הבא</button>
-        </div>
     </div>
 
     <!-- Slide 5: Gallery - Funny & Calming Pictures -->
@@ -578,11 +555,6 @@
                 <img class="gallery-img" src="https://images.pexels.com/photos/47547/squirrel-animal-cute-rodents-47547.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop" alt="סנאי חמוד" loading="lazy">
             </div>
         </div>
-        <div class="navigation">
-            <button class="nav-btn prev" onclick="prevSlide()">הקודם</button>
-            <div class="dots"></div>
-            <button class="nav-btn next" onclick="nextSlide()">הבא</button>
-        </div>
     </div>
 
     <!-- Slide 6: Game - Quick Show Item -->
@@ -626,11 +598,6 @@
                 <span class="game-label">משהו אחר!</span>
             </div>
         </div>
-        <div class="navigation">
-            <button class="nav-btn prev" onclick="prevSlide()">הקודם</button>
-            <div class="dots"></div>
-            <button class="nav-btn next" onclick="nextSlide()">הבא</button>
-        </div>
     </div>
 
     <!-- Slide 7: Wishes -->
@@ -673,13 +640,16 @@
                 <span class="wish-label">מנוחה טובה</span>
             </div>
         </div>
-        <div class="navigation">
-            <button class="nav-btn prev" onclick="prevSlide()">הקודם</button>
-            <div class="dots"></div>
-            <button class="nav-btn next" onclick="nextSlide()">הבא</button>
-        </div>
     </div>
 
+</div>
+
+
+<!-- Global Navigation Bar -->
+<div class="navigation" id="globalNav">
+    <button class="nav-btn prev" onclick="prevSlide()">הקודם</button>
+    <div class="dots" id="globalDots"></div>
+    <button class="nav-btn next" onclick="nextSlide()">הבא</button>
 </div>
 
 <!-- Feedback Overlay -->
@@ -704,13 +674,11 @@
     function prevSlide() { if (currentSlide > 0) goToSlide(currentSlide - 1); }
 
     function updateAllDots() {
-        document.querySelectorAll('.slide').forEach(slide => {
-            slide.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
-            const prev = slide.querySelector('.nav-btn.prev');
-            const next = slide.querySelector('.nav-btn.next');
-            if (prev) prev.disabled = currentSlide === 0;
-            if (next) next.disabled = currentSlide === totalSlides - 1;
-        });
+        document.querySelectorAll('#globalDots .dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+        var prev = document.querySelector('#globalNav .nav-btn.prev');
+        var next = document.querySelector('#globalNav .nav-btn.next');
+        if (prev) prev.disabled = currentSlide === 0;
+        if (next) next.disabled = currentSlide === totalSlides - 1;
     }
 
     function selectOption(card, label) {
@@ -773,17 +741,16 @@
         }
     }, { passive: true });
 
-    document.querySelectorAll('.slide').forEach(function(slide, idx) {
-        var dc = slide.querySelector('.dots');
-        if (!dc) return;
-        dc.innerHTML = '';
+    (function() {
+        var dc = document.getElementById('globalDots');
         for (var i = 0; i < totalSlides; i++) {
             var dot = document.createElement('span');
-            dot.className = 'dot' + (i === idx ? ' active' : '');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
             dot.onclick = (function(n) { return function() { goToSlide(n); }; })(i);
             dc.appendChild(dot);
         }
-    });
+        updateAllDots();
+    })();
 </script>
 
 </body>
